@@ -7,6 +7,9 @@
 Various personally customized ansible scripts for my own personal infrastructure, can be used standalone or in conjuction with [kvm-install-vm](https://github.com/SurrealTiggi/kvm-install-vm/blob/master/kvm-install-vm) and [bootstrap.py](https://github.com/SurrealTiggi/kvm-install-vm/blob/master/bootstrap.py)
 
 ### ~/.ansible.cfg
+
+> if using inventory.yml via bootstrap.py then this will already by configured.
+
 ```bash
     $ cat ~/.ansible.cfg
     [defaults]
@@ -25,7 +28,7 @@ Various personally customized ansible scripts for my own personal infrastructure
 > **NOTE!**
 > 1. defaults.yml is the default location for various variables that *should* remain encrypted (api keys, ssh keys, config urls, etc)
 > 2. It also contains default variables for various roles implemented throughout certain playbooks, documentation for which can be seen via [Ansible Galaxy](https://galaxy.ansible.com)
-> 3. Use `ansible-vault --vault-password-file=${VAULT_FILE}` to decrypt
+> 3. Use `ansible-vault --vault-password-file=${VAULT_FILE} edit vars/defaults.yml` to decrypt
 
 
 ## Running manually...:
