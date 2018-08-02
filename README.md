@@ -21,20 +21,20 @@ Various personally customized ansible scripts for my own personal infrastructure
     [privilege_escalation]
     become=True
     become_method=sudo
-    become_user=${YOUR_USER}
+    become_user=${ANSIBLE_USER}
     become_ask_pass=False
 ```
 
 > **NOTE!**
 > 1. defaults.yml is the default location for various variables that *should* remain encrypted (api keys, ssh keys, config urls, etc)
 > 2. It also contains default variables for various roles implemented throughout certain playbooks, documentation for which can be seen via [Ansible Galaxy](https://galaxy.ansible.com)
-> 3. Use `ansible-vault --vault-password-file=${VAULT_FILE} edit vars/defaults.yml` to decrypt
+> 3. Strings encrypted with `ansible-vault encrypt_string --vault-id ${VAULT_FILE} '<string to encrypt>'`
 
 
 ## Running manually...:
 
 ```bash
 cd ~/ansible_scripts
-ansible-playbook playbook.yml
+ansible-playbook --vault-id ${VAULT_FILE} playbook.yml
 ```
 

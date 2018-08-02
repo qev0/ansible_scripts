@@ -1,0 +1,42 @@
+--- # Telegraf Custom Configs
+
+telegraf_install_version: stable
+
+telegraf_runas_user: telegraf
+telegraf_runas_group: telegraf
+
+# Configuration Template
+telegraf_configuration_template: telegraf.conf.j2
+
+# Configuration Variables
+telegraf_tags:
+telegraf_hostname: "{{ ansible_hostname }}"
+
+# Override this variable if there's a specific source you'd like to install
+telegraf_install_url:
+telegraf_influxdb_urls:
+  - http://observer:8086
+telegraf_plugins_base:
+  - name: mem
+  - name: system
+  - name: cpu
+    options:
+      percpu: "true"
+      totalcpu: "true"
+      fielddrop:
+        - "time_*"
+  - name: disk
+    options:
+      mountpoints:
+        - "/"
+  - name: diskio
+    options:
+      skip_serial_number: "true"
+  - name: procstat
+    options:
+      exe: "influxd"
+      prefix: "influxdb"
+  - name: net
+    options:
+      interfaces:
+        - "{{ ansible_default_ipv4.interface }}"

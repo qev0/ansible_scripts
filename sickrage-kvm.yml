@@ -5,6 +5,7 @@
     playbook_version: 0.1b
   vars_files:
     - vars/defaults.yml
+    - vars/telegraf.yml
       #vars_prompt:
       #- name: test_var
       #prompt: Test Var
