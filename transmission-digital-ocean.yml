@@ -1,0 +1,52 @@
+--- # Transmission Ansible Playbook
+- hosts: all
+  gather_facts: no
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+  
+#   /*
+#   # Users
+# ###############
+# useradd tiggi
+# wget pub_key into /home/tiggi/.ssh/authorized_keys
+# chmod 0600 /home/tiggi/.ssh/authorized_keys
+# disable root
+# sudo NO PASSWD tiggi
+# edit bash.rc
+# Permit root login off
+
+# # Package install
+# #################
+# yum install epel-release
+# yum install vim httpd ansible transmission-cli transmission-common transmission-daemon wget fail2ban transmission mlocate fuse vnstat -y
+
+# # Vnstat
+# ########
+# vnstat --create -i eth0
+# systemctl enable --node vnstat
+
+# # Transmission
+# ##############
+# systemctl start transmission-daemon
+# systemctl stop transmission-daemon
+# wget config into /var/lib/transmission/.config/transmission-daemon/settings.json
+# mkdir -p /media/Torrents/Incomplete
+# chown -R transmission /media/Torrents/
+# systemctl enable transmission-daemon
+
+# # Rclone
+# ########
+# mkdir -p /root/.config/rclone/
+# mkdir /media/GDrive
+# rpm -ivh https://downloads.rclone.org/v1.41/rclone-v1.41-linux-amd64.rpm
+# wget into /root/.config/rclone/rclone.conf
+# wget into /etc/systemd/system/rclone.service
+# systemctl daemon-reload
+# systemctl enable rclone
+
+# curl -sSL https://agent.digitalocean.com/install.sh | sh
+
+# reboot
+# */

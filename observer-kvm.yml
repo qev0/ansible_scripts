@@ -1,0 +1,23 @@
+--- # Observer Ansible Playbook
+- hosts: observer
+  gather_facts: yes
+  vars:
+    playbook_version: 0.1b
+  vars_files:
+    - defaults.yml
+  roles:
+     - { role: rossmcdonald.influxdb }
+  
+  tasks:
+    - name: create influxDB data mount point
+      file:
+        name: "{{ media_mount }}"
+        state: directory
+
+    - name: mount influxDB NFS share
+      mount:
+        name: "{{ media_mount }}"
+        src: "{{ cifs_share }}"
+        fstype: cifs
+        state: mounted
+        opts: "username={{ cifs_username }},password={{ cifs_password }}"
