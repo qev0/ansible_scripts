@@ -1,5 +1,7 @@
 --- # Artorias Pi Config
 - hosts: artorias
+  vars:
+    bashrc_host_type: PI
   # Configure nginx as reverse proxy for all external providers
   # Configure fail2ban(ssh, http, https)
   # Configure letsencrypt

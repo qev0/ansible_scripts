@@ -2,151 +2,21 @@
 - hosts: sickrage
   gather_facts: yes
   vars:
-    playbook_version: 0.1b
+    bashrc_host_type: KVM
   vars_files:
     - vars/defaults.yml
     - vars/telegraf.yml
-      #vars_prompt:
-      #- name: test_var
-      #prompt: Test Var
   roles:
      - { role: rossmcdonald.telegraf }
      
   tasks:
-    - name: Setup bashrc
-      blockinfile:
-        dest: /etc/bashrc
-        block: |
-          # Color stuff
-          USER_COLOR="\e[92m"
-          HOST_COLOR="\e[93m"
-          HEADER_COLOR="\e[38;5;39m"
-          NO_COLOR="\e[39m"
-          
-          if [ ${UID} -eq 0 ]; then
-            USER_COLOR="\e[91m"
-          fi
-          
-          PS1="${HEADER_COLOR}KVM ${USER_COLOR}\u${HOST_COLOR}@\h \W \\$ ${NO_COLOR}"
-
-    - name: Ensure necessary packages are installed
-      yum: pkg={{ item }} state=installed update_cache=true
-      with_items:
-        - php
-        - fuse
-        - git
-        - "{{ rclone_rpm_url }}"
-      register: result
+    - include: tasks/bashrc.yml
+    - include: tasks/sickrage.yml
+    - include: tasks/rclone.yml
+    
       #- debug: var=result
 
-    - name: Checkout Sickrage Git project
-      git:
-        repo: https://github.com/SickRage/SickRage.git
-        dest: /opt/sickrage
-
-    - name: Setup SickRage user and directory
-      user:
-        name: sickrage
-        home: /opt/sickrage
-        shell: /usr/sbin/nologin
-
-    - name: Ensure correct ownership
-      file:
-        path: /opt/sickrage
-        recurse: yes
-        owner: sickrage
-        group: sickrage
-
-    - name: Ensure sickrage.service file
-      file:
-        path: /etc/systemd/system/sickrage.service
-        state: touch
-        owner: root
-        group: root
-        mode: 0755
-
-    - name: Manage sickrage.service content
-      blockinfile:
-        dest: /etc/systemd/system/sickrage.service
-        block: |
-          [Unit]
-          Description=SickRage Daemon
-          After=network.target
-
-          [Service]
-          Restart=always
-          User=sickrage
-          Group=sickrage
-          ExecStart=/usr/bin/env python2 /opt/sickrage/SickBeard.py --quiet --config /opt/sickrage/config.ini --datadir /opt/sickrage
-
-          [Install]
-          WantedBy=multi-user.target
-
-    - name: Ensure /opt/sickrage/config.ini content
-      get_url:
-        url: "{{ sickrage_config }}"
-        dest: /opt/sickrage/config.ini
-        mode: 0644
-
-    - name: Enable SickRage service
-      systemd: daemon_reload=yes name=sickrage enabled=yes state=started
       #notify: Restart sickrage service
-
-    - name: Setup rclone mount dir
-      file:
-        path: /media/GDrive
-        state: directory
-        owner: root
-        group: root
-        mode: 0775
-    
-    - name: Setup rclone config dir
-      file:
-        path: /root/.config/rclone
-        state: directory
-        owner: root
-        group: root
-        mode: 0644
-        recurse: yes
-
-    - name: Ensure rclone.service file
-      file:
-        path: /etc/systemd/system/rclone.service
-        state: touch
-        owner: root
-        group: root
-        mode: 0755
-
-    
-    - name: Manage rclone systemd content
-      blockinfile:
-        dest: /etc/systemd/system/rclone.service
-        block: |
-          [Unit]
-          Description=rclone Google Cloud Drive FUSE mount
-          Documentation=http://rclone.org/docs/
-          Wants=network.target
-          After=network.target
-
-          [Service]
-          Type=simple
-          User=root
-          Group=root
-          ExecStart=/usr/bin/rclone mount --allow-non-empty --allow-other mygdrive:HIVE /media/GDrive
-          ExecStop=/usr/bin/fusermount -uz /path/
-
-          [Install]
-          WantedBy=multi-user.target
-    
-    - name: Grab rclone service config
-      get_url:
-        url: "{{ rclone_config }}"
-        dest: /root/.config/rclone/rclone.conf
-        mode: 0755
-
-    - name: Enable rclone service
-      systemd: daemon_reload=yes name=rclone enabled=yes state=started
-
 
   handlers:
       #- name: Restart sickrage service

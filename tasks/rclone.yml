@@ -1,0 +1,68 @@
+--- # Rclone setup
+- name: Ensure necessary packages are installed
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - fuse
+    - "{{ rclone_rpm_url }}"
+  register: result
+
+- name: Setup rclone mount dir
+  file:
+    path: /media/GDrive
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+  
+- name: Setup rclone config dir
+  file:
+    path: /root/.config/rclone
+    state: directory
+    owner: root
+    group: root
+    mode: 0644
+    recurse: yes
+
+- name: Ensure rclone.service file
+  file:
+    path: /etc/systemd/system/rclone.service
+    state: touch
+    owner: root
+    group: root
+    mode: 0755
+  
+- name: Manage rclone systemd content
+  blockinfile:
+    dest: /etc/systemd/system/rclone.service
+    block: |
+      [Unit]
+      Description=rclone Google Cloud Drive FUSE mount
+      Documentation=http://rclone.org/docs/
+      Wants=network.target
+      After=network.target
+
+      [Service]
+      Type=simple
+      User=root
+      Group=root
+      ExecStart=/usr/bin/rclone mount --allow-non-empty --allow-other mygdrive:HIVE /media/GDrive
+      ExecStop=/usr/bin/fusermount -uz /path/
+
+      [Install]
+      WantedBy=multi-user.target
+
+- name: Setup rclone config file
+  template:
+  src: rclone.conf.j2
+  dest: /root/.config/rclone/rclone.conf
+  force: yes
+  backup: yes
+
+- name: Enable rclone service
+  systemd:
+    daemon_reload: yes
+    name: rclone
+    enabled: yes
+    state: started

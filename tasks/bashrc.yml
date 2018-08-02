@@ -1,0 +1,16 @@
+--- # Base bashrc setup for fun
+- name: Setup bashrc
+  blockinfile:
+    dest: /etc/bashrc
+    block: |
+      # Color stuff
+      USER_COLOR="\e[92m"
+      HOST_COLOR="\e[93m"
+      HEADER_COLOR="\e[38;5;39m"
+      NO_COLOR="\e[39m"
+      
+      if [ ${UID} -eq 0 ]; then
+        USER_COLOR="\e[91m"
+      fi
+      
+      PS1="${HEADER_COLOR}{{ bashrc_host_type }} ${USER_COLOR}\u${HOST_COLOR}@\h \W \\$ ${NO_COLOR}"

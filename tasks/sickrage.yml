@@ -1,0 +1,66 @@
+--- # SickRage setup
+- name: Ensure necessary packages are installed
+  yum:
+    name: "{{ item }}" 
+    state: present
+  with_items:
+    - php
+    - git
+  register: result
+
+- name: Checkout Sickrage Git project
+  git:
+    repo: https://github.com/SickRage/SickRage.git
+    dest: /opt/sickrage
+
+- name: Setup SickRage user and directory
+  user:
+    name: sickrage
+    home: /opt/sickrage
+    shell: /usr/sbin/nologin
+
+- name: Ensure correct ownership
+  file:
+    path: /opt/sickrage
+    recurse: yes
+    owner: sickrage
+    group: sickrage
+
+- name: Ensure sickrage.service file
+  file:
+    path: /etc/systemd/system/sickrage.service
+    state: touch
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Manage sickrage.service content
+  blockinfile:
+    dest: /etc/systemd/system/sickrage.service
+    block: |
+      [Unit]
+      Description=SickRage Daemon
+      After=network.target
+
+      [Service]
+      Restart=always
+      User=sickrage
+      Group=sickrage
+      ExecStart=/usr/bin/env python2 /opt/sickrage/SickBeard.py --quiet --config /opt/sickrage/config.ini --datadir /opt/sickrage
+
+      [Install]
+      WantedBy=multi-user.target
+
+- name: Ensure /opt/sickrage/config.ini content
+  get_url:
+    url: "{{ sickrage_config }}"
+    dest: /opt/sickrage/config.ini
+    mode: 0644
+    # Notify a restart if there are changes???
+
+- name: Enable SickRage service
+  systemd:
+    daemon_reload: yes
+    name: sickrage
+    enabled: yes
+    state: started

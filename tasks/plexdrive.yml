@@ -1,0 +1,73 @@
+--- # Plexdrive setup
+- name: Ensure necessary packages are installed
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - fuse
+    - "{{ plexdrive_binary_url }}"
+  register: result
+
+- name: Setup plexdrive mount dir
+  file:
+    path: /media/GDrive
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  
+- name: Setup plexdrive config dir
+  file:
+    path: /opt/plexdrive
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+    recurse: yes
+
+- name: Ensure plexdrive.service file
+  file:
+    path: /etc/systemd/system/plexdrive.service
+    state: touch
+    owner: root
+    group: root
+    mode: 0755
+  
+- name: Manage plexdrive systemd content
+  blockinfile:
+    dest: /etc/systemd/system/plexdrive.service
+    block: |
+      [Unit]
+      Description=Plexdrive Google Cloud Drive FUSE mount
+      Documentation=https://github.com/dweidenfeld/plexdrive
+      Wants=network.target
+      After=network.target
+
+      [Service]
+      Type=simple
+      User=root
+      Group=root
+      ExecStart=/usr/bin/plexdrive mount -v 3 --fuse-options=allow_other,read_only --config=/opt/plexdrive --cache-file=/opt/plexdrive/cache.bolt --root-node-id={{ plexdrive_gdrive_root }} /media/GDrive/
+      ExecStop=/usr/bin/fusermount -uz /media/GDrive
+
+      [Install]
+      WantedBy=multi-user.target
+
+- name: Setup plexdrive token file
+  blockinfile:
+    dest: /opt/plexdrive/token.json
+    block: |
+      {"access_token":"{{ plexdrive_access_token }}","token_type":"Bearer","refresh_token":"{{ plexdrive_refresh_token }}","expiry":"2018-05-18T18:08:12.093008954+01:00"}
+
+- name: Setup plexdrive config file
+  blockinfile:
+    dest: /opt/plexdrive/config.json
+    block: |
+      {"ClientID":"{{ plexdrive_client_id }}","ClientSecret":"{{ plexdrive_client_secret }}"}
+
+- name: Enable plexdrive service
+  systemd:
+    daemon_reload: yes
+    name: plexdrive
+    enabled: yes
+    state: started
