@@ -30,6 +30,14 @@ Various personally customized ansible scripts for my own personal infrastructure
 > 2. It also contains default variables for various roles implemented throughout certain playbooks, documentation for which can be seen via [Ansible Galaxy](https://galaxy.ansible.com)
 > 3. Strings encrypted with `ansible-vault encrypt_string --vault-id ${VAULT_FILE} '<string to encrypt>'`
 
+## Convenient way to decrypt on the fly
+
+```bash
+$ snap install yq
+$ yq read playbook.yml encrypted_value | ansible-vault --vault-id vault-password decrypt
+Decryption successful
+mysecretstring
+```
 
 ## Running manually...:
 
