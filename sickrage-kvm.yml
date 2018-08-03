@@ -13,6 +13,7 @@
     - include: tasks/bashrc.yml
     - include: tasks/sickrage.yml
     - include: tasks/rclone.yml
+    - include: tasks/backups.yml
     
       #- debug: var=result
 

@@ -1,0 +1,37 @@
+--- # Simple backup setup
+
+# Sickrage
+##########
+- name: Configure Sickrage backup
+  file:
+    path: /opt/scripts/sickrage_bk.sh
+    state: touch
+    owner: root
+    group: root
+    mode: 0755
+    recurse: yes
+    when: "'sickrage' in inventory_hostname"
+
+- name: Configure Sickrage backup script
+  blockinfile:
+    dest: /opt/scripts/sickrage_bk.sh
+    block: |
+      #!/bin/bash
+      cd /opt/sickrage
+      tar czf sickrage.tar.gz sickbeard.db cache.db failed.db
+      # TODO:
+      # mv to backup nfs mount
+    when: "'sickrage' in inventory_hostname"
+
+- name: Schedule Sickrage backup script
+  cron:
+    name: "Backup Sickrage"
+    minute: "0"
+    hour: "6"
+    job: /opt/scripts/sickrage_bk.sh
+  when: "'sickrage' in inventory_hostname"
+
+
+# Plex
+##########
+

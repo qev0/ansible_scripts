@@ -6,6 +6,8 @@
   with_items:
     - php
     - git
+    - epel-release
+    - nodejs
   register: result
 
 - name: Checkout Sickrage Git project

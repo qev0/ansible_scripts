@@ -8,7 +8,8 @@
     - name: install python2.7
       raw: test -e /usr/bin/python || (apt update -y && apt install -y python2.7)
 
-      # ansible-galaxy install dj-wasabi.telegraf
+      # ansible-galaxy install rossmcdonald.telegraf
+      # apt install nodejs
 
 # - hosts: all
 #   become: True

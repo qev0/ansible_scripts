@@ -55,10 +55,10 @@
 
 - name: Setup rclone config file
   template:
-  src: rclone.conf.j2
-  dest: /root/.config/rclone/rclone.conf
-  force: yes
-  backup: yes
+    src: rclone.conf.j2
+    dest: /root/.config/rclone/rclone.conf
+    force: yes
+    backup: yes
 
 - name: Enable rclone service
   systemd:
