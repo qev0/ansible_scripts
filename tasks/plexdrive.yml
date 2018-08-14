@@ -4,7 +4,6 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - fuse
     - "{{ plexdrive_binary_url }}"
   register: result
 

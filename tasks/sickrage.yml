@@ -5,8 +5,6 @@
     state: present
   with_items:
     - php
-    - git
-    - epel-release
     - nodejs
   register: result
 

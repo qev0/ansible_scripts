@@ -11,6 +11,7 @@
      
   tasks:
     - include: tasks/bashrc.yml
+    - include: tasks/base.yml
     - include: tasks/sickrage.yml
     - include: tasks/rclone.yml
     - include: tasks/backups.yml

@@ -1,0 +1,12 @@
+--- # Base tasks to be done across all VM's
+- name: Ensure packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - iftop
+    - vim
+    - epel-release
+    - git
+    - fuse
+  register: result

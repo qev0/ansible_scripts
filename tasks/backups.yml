@@ -10,7 +10,7 @@
     group: root
     mode: 0755
     recurse: yes
-    when: "'sickrage' in inventory_hostname"
+  when: "'sickrage' in inventory_hostname"
 
 - name: Configure Sickrage backup script
   blockinfile:
@@ -21,7 +21,7 @@
       tar czf sickrage.tar.gz sickbeard.db cache.db failed.db
       # TODO:
       # mv to backup nfs mount
-    when: "'sickrage' in inventory_hostname"
+  when: "'sickrage' in inventory_hostname"
 
 - name: Schedule Sickrage backup script
   cron:

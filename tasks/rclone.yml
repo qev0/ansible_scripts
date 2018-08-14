@@ -4,7 +4,6 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - fuse
     - "{{ rclone_rpm_url }}"
   register: result
 
