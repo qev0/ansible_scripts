@@ -2,7 +2,7 @@
 
 # Sickrage
 ##########
-- name: Configure Sickrage backup
+- name: Ensure sickrage backup scripts
   file:
     path: /opt/scripts/sickrage_bk.sh
     state: touch
@@ -11,7 +11,7 @@
     mode: 0755
   when: "'sickrage' in inventory_hostname"
 
-- name: Configure Sickrage backup script
+- name: Configure Sickrage backup script content
   blockinfile:
     dest: /opt/scripts/sickrage_bk.sh
     block: |

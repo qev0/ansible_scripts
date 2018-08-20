@@ -10,3 +10,12 @@
     - git
     - fuse
   register: result
+
+- name: Ensure scripts directory
+  file:
+    path: /opt/scripts
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+    recurse: yes
