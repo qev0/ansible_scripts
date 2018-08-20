@@ -2,6 +2,11 @@
 - hosts: artorias
   vars:
     bashrc_host_type: PI
+  vars_files:
+    - vars/defaults.yml
+
+  tasks:
+    - include: tasks/bashrc.yml
   # Configure nginx as reverse proxy for all external providers
   # Configure fail2ban(ssh, http, https)
   # Configure letsencrypt
