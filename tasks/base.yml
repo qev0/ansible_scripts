@@ -6,9 +6,10 @@
   with_items:
     - iftop
     - vim
-    - epel-release
+    - "{{ epel-release if 'CentOS' in ansible_distribution else '' }}"
     - git
     - fuse
+    - "{{ snapd if 'Ubuntu' in ansible_distribution else '' }}"
   register: result
 
 - name: Ensure scripts directory

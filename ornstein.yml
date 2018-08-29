@@ -12,9 +12,10 @@
      
   tasks:
     - include: tasks/bashrc.yml
-    #- include: tasks/base.yml # Need to remove epel if Ubuntu
-    #- include: tasks/plex.yml
+    - include: tasks/base.yml
     - include: tasks/haproxy.yml
+    #- include: tasks/plex.yml
+    #- include: tasks/kvm.yml
     #- include: tasks/backups.yml
     #- include: tasks/nfs.yml
 

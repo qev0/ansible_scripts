@@ -77,12 +77,12 @@ backend {{ acl.name }}
         http-request auth realm Admin if !AuthOkay_Admin
 {% endif %}
 {% set i = 0 %}
-        {% for server in acl.servers %}
-        {% if acl.ssl %}
+{% for server in acl.servers %}
+{% if acl.ssl %}
         server {{ acl.name }}{{ i + 1 }} {{ server }} check ssl check-ssl verify none
-        {% else %}
+{% else %}
         server {{ acl.name }}{{ i + 1 }} {{ server }} check inter 1s port 80 fall 3 rise 2
-        {% endif %}
-        {% endfor %}
+{% endif %}
+{% endfor %}
 
 {% endfor %}
