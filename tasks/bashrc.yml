@@ -1,7 +1,18 @@
 --- # Base bashrc setup for fun
+- name: Set correct Bash config location
+  bash_config: '/etc/bashrc'
+  when:
+    - ansible_distribution == 'CentOS'
+
+- name: Set correct Bash config location
+  bash_config: '/etc/bash.bashrc'
+  when:
+    - ansible_distribution | regex_search('(Debian|Ubuntu)')
+
+
 - name: Setup bashrc
   blockinfile:
-    dest: /etc/bashrc
+    dest: "{{ bash_config }}"
     block: |
       # Color stuff
       USER_COLOR="\e[92m"

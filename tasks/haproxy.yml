@@ -6,6 +6,18 @@
   with_items:
     - haproxy
   register: result
+  when:
+    - ansible_distribution == 'CentOS'
+
+- name: Ensure necessary packages are installed
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - haproxy
+  register: result
+  when:
+    - ansible_distribution | regex_search('(Debian|Ubuntu)')
 
 - name: Setup haproxy config file
   template:

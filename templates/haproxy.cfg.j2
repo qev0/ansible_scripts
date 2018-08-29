@@ -83,5 +83,6 @@ backend {{ acl.name }}
         server {{ acl.name }}{{ i + 1 }} {{ server }} check ssl check-ssl verify none
                 {% else %}
         server {{ acl.name }}{{ i + 1 }} {{ server }} check inter 1s port 80 fall 3 rise 2
-        {% endif %}
+                {% endif %}
+        {% endfor %}
 {% endfor %}
