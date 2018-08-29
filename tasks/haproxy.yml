@@ -1,5 +1,5 @@
 --- #HAProxy installer
-- name: Ensure necessary packages are installed
+- name: Ensure necessary packages are installed (CentOS)
   yum:
     name: "{{ item }}"
     state: present
@@ -9,7 +9,7 @@
   when:
     - ansible_distribution == 'CentOS'
 
-- name: Ensure necessary packages are installed
+- name: Ensure necessary packages are installed (Ubuntu)
   apt:
     name: "{{ item }}"
     state: present

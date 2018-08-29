@@ -1,16 +1,33 @@
 --- # Base tasks to be done across all VM's
-- name: Ensure packages
+- name: Ensure CentOS specific packages
   yum:
     name: "{{ item }}"
     state: present
   with_items:
+    - net-tools
     - iftop
     - vim
-    - "{{ epel-release if 'CentOS' in ansible_distribution else '' }}"
     - git
     - fuse
-    - "{{ snapd if 'Ubuntu' in ansible_distribution else '' }}"
+    - epel-release
   register: result
+  when:
+    - ansible_distribution == 'CentOS'
+
+- name: Ensure Ubuntu specific packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - net-tools
+    - iftop
+    - vim
+    - git
+    - fuse
+    - snap
+  register: result
+  when:
+    - ansible_distribution | regex_search('(Ubuntu)')
 
 - name: Ensure scripts directory
   file:
