@@ -46,20 +46,19 @@ frontend {{ haproxy_frontend_name }}
         mode http
         http-response set-header Strict-Transport-Security max-age=15768000
         http-request set-header X-Forwarded-Host %[req.hdr(Host)]
-        {% if 'haproxy_ssl_cert' is not none %}
+{% if 'haproxy_ssl_cert' is not none %}
         bind *:{{ haproxy_https_port }} ssl crt {{ haproxy_ssl_cert }}
         bind *:{{ haproxy_http_port }}
-        {% endif %}
+{% endif %}
         
         redirect scheme https code 301 if !{ ssl_fc }
 
         # ACLs
-        {% for acl in haproxy_acls %}
+{% for acl in haproxy_acls %}
         acl {{ acl.name }} url_beg {{ acl.name }}.{{ haproxy_fqdn }}
         use_backend {{ acl.name }} if {{ acl.name }}
 
-        {% endfor %}
-
+{% endfor %}
         # default_backend 
 
 
@@ -73,16 +72,17 @@ backend {{ acl.name }}
         #option httpchk GET /health/check
         #option http-server-close
         #option forwardfor
-        {% if acl.auth %}
+{% if acl.auth %}
         acl AuthOkay_Admin http_auth(UsersAuth)
         http-request auth realm Admin if !AuthOkay_Admin
-        {% endif %}
-        {% set i = 0 %}
+{% endif %}
+{% set i = 0 %}
         {% for server in acl.servers %}
-                {% if acl.ssl %}
+        {% if acl.ssl %}
         server {{ acl.name }}{{ i + 1 }} {{ server }} check ssl check-ssl verify none
-                {% else %}
+        {% else %}
         server {{ acl.name }}{{ i + 1 }} {{ server }} check inter 1s port 80 fall 3 rise 2
-                {% endif %}
+        {% endif %}
         {% endfor %}
+
 {% endfor %}
