@@ -1,0 +1,22 @@
+--- #HAProxy installer
+- name: Ensure necessary packages are installed
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - haproxy
+  register: result
+
+- name: Setup haproxy config file
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    force: yes
+    backup: yes
+
+- name: Enable haproxy service
+  systemd:
+    daemon_reload: yes
+    name: haproxy
+    enabled: yes
+    state: started

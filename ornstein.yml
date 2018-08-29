@@ -1,19 +1,24 @@
 --- # Ornstein Ryzen VM host Ansible playbook
-- hosts: all
-  gather_facts: no
-  become: yes
-  become_user: root
-  become_method: sudo
+- hosts: ornstein
+  gather_facts: yes
+  vars:
+    bashrc_host_type: RYZEN
+  vars_files:
+    - vars/defaults.yml
+    - vars/telegraf.yml
+    - vars/haproxy.yml
+  roles:
+     - { role: rossmcdonald.telegraf }
+     
   tasks:
-    - name: install python2.7
-      raw: test -e /usr/bin/python || (apt update -y && apt install -y python2.7)
+    - include: tasks/bashrc.yml
+    #- include: tasks/base.yml # Need to remove epel if Ubuntu
+    #- include: tasks/plex.yml
+    - include: tasks/haproxy.yml
+    #- include: tasks/backups.yml
+    #- include: tasks/nfs.yml
 
-      # ansible-galaxy install rossmcdonald.telegraf
-      # apt install nodejs
 
-# - hosts: all
-#   become: True
-#   become_method: sudo
 #   #vars:
 #   #  cifs_share: //diskstation/VMs    # Change to your NFS share
 #   #  cifs_username: your-nfs-username # Change to your NFS username
