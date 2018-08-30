@@ -37,9 +37,9 @@
     group: root
     mode: 0755
 
-- name: Manage sickrage.service content
+- name: Manage meshping.service content
   blockinfile:
-    dest: /etc/systemd/system/sickrage.service
+    dest: /etc/systemd/system/meshping.service
     block: |
       [Unit]
       Description=meshping
