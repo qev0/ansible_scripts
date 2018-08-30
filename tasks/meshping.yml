@@ -11,6 +11,7 @@
     - python-flask
     - python-redis
     - redis
+    - gcc
 
 - name: Checkout meshping Bitbucket project
   hg:
@@ -18,7 +19,7 @@
     dest: /opt/meshping
 
 - name: Build meshping
-  local_action: shell /opt/meshping/build.sh
+  command: chdir=/opt/meshping ./build.sh
   register: result
 
 - name: Create cli symlink
