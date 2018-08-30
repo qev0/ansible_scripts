@@ -52,6 +52,13 @@
       [Install]
       WantedBy=multi-user.target
 
+- name: Enable redis service
+  systemd:
+    daemon_reload: no
+    name: redis
+    enabled: yes
+    state: started
+
 - name: Enable meshping service
   systemd:
     daemon_reload: yes
