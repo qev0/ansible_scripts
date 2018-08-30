@@ -10,6 +10,7 @@
     - liboping
     - python-flask
     - python-redis
+    - python-devel
     - redis
     - gcc
 
