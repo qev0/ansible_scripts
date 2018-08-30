@@ -29,13 +29,28 @@
     dest: /usr/local/bin/mpcli
     state: link
 
-- name: Create systemd service config
-  copy:
-    src: /opt/meshping/meshping.service
-    dest: /etc/systemd/system
+- name: Ensure meshping.service file
+  file:
+    path: /etc/systemd/system/meshping.service
+    state: touch
     owner: root
     group: root
     mode: 0755
+
+- name: Manage sickrage.service content
+  blockinfile:
+    dest: /etc/systemd/system/sickrage.service
+    block: |
+      [Unit]
+      Description=meshping
+      After=network.target remote-fs.target nss-lookup.target
+
+      [Service]
+      Type=simple
+      ExecStart=/usr/bin/python -- /opt/meshping/src/meshping.py
+
+      [Install]
+      WantedBy=multi-user.target
 
 - name: Enable meshping service
   systemd:
@@ -45,7 +60,7 @@
     state: started
 
 - name: Setup ping targets
-  local_action: shell mpcli -a "{{ item }}"
+  command: mpcli -a "{{ item }}"
   with_items:
     - google.com@8.8.8.8
     - router@192.168.0.1
