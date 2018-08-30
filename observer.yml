@@ -2,22 +2,32 @@
 - hosts: observer
   gather_facts: yes
   vars:
-    playbook_version: 0.1b
+    bashrc_host_type: KVM
   vars_files:
-    - defaults.yml
+    - vars/defaults.yml
+    - vars/telegraf.yml
+    - vars/influx.yml
+    - vars/grafana.yml
   roles:
      - { role: rossmcdonald.influxdb }
   
   tasks:
+    - include: tasks/bashrc.yml
+    - include: tasks/base.yml
+    - include: tasks/meshping.yml
+    #- include: tasks/influx.yml
+    #- include: tasks/grafana.yml
+    #- include: tasks/prometheus.yml
+
     - name: create influxDB data mount point
       file:
-        name: "{{ media_mount }}"
+        name: "{{ influx_data_dir }}"
         state: directory
 
-    - name: mount influxDB NFS share
-      mount:
-        name: "{{ media_mount }}"
-        src: "{{ cifs_share }}"
-        fstype: cifs
-        state: mounted
-        opts: "username={{ cifs_username }},password={{ cifs_password }}"
+    # - name: mount influxDB NFS share
+    #   mount:
+    #     name: "{{ influx_data_dir }}"
+    #     src: "{{ nfs_share }}"
+    #     fstype: nfs
+    #     state: mounted
+    #     opts: "username={{ cifs_username }},password={{ cifs_password }}"

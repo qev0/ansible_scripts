@@ -1,0 +1,53 @@
+--- # Meshping Ansible Tasks
+- name: Install dependencies
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - cython
+    - liboping-devel
+    - liboping
+    - python-flask
+    - python-redis
+    - redis
+
+- name: Checkout meshping Bitbucket project
+  git:
+    repo: http://bitbucket.org/Svedrin/meshping
+    dest: /opt/meshping
+
+- name: Build meshping
+  local_action: shell /opt/meshping/build.sh
+  register: result
+
+- name: Create cli symlink
+  file:
+    src: /opt/meshping/cli.py
+    dest: /usr/local/bin/mpcli
+    state: link
+
+- name: Create systemd service config
+  copy:
+    src: /opt/meshping/meshping.service
+    dest: /etc/systemd/system
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Enable meshping service
+  systemd:
+    daemon_reload: yes
+    name: meshping
+    enabled: yes
+    state: started
+
+- name: Setup ping targets
+  local_action: shell mpcli -a "{{ item }}"
+  with_items:
+    - google.com@8.8.8.8
+    - router@192.168.0.1
+    - eu.battle.net
+    - speedtest-lon1.digitalocean.com
+    - speedtest-nyc1.digitalocean.com
+    - speedtest-sfo1.digitalocean.com
+    - speedtest.mybroadband.co.za

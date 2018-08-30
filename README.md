@@ -1,7 +1,6 @@
 # ansible_scripts
 
-### `**Powered by:**`
-[![N|Solid](https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Ansible_logo.svg/195px-Ansible_logo.svg.png)](https://www.ansible.com/)
+[![Generic badge](https://img.shields.io/badge/Powered%20By-Ansible-LIGHTBLUE.svg)](https://www.ansible.com/)
 
 ### Description
 Various personally customized ansible scripts for my own personal infrastructure, can be used standalone or in conjuction with [kvm-install-vm](https://github.com/SurrealTiggi/kvm-install-vm/blob/master/kvm-install-vm) and [bootstrap.py](https://github.com/SurrealTiggi/kvm-install-vm/blob/master/bootstrap.py)
