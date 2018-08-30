@@ -26,7 +26,7 @@
 - name: Create cli symlink
   file:
     src: /opt/meshping/cli.py
-    dest: /usr/local/bin/mpcli
+    dest: /usr/bin/mpcli
     state: link
 
 - name: Ensure meshping.service file
@@ -60,12 +60,12 @@
     state: started
 
 - name: Setup ping targets
-  command: mpcli -a "{{ item }}"
+  command: "{{ item }}"
   with_items:
-    - google.com@8.8.8.8
-    - router@192.168.0.1
-    - eu.battle.net
-    - speedtest-lon1.digitalocean.com
-    - speedtest-nyc1.digitalocean.com
-    - speedtest-sfo1.digitalocean.com
-    - speedtest.mybroadband.co.za
+    - mpcli -a google.com@8.8.8.8
+    - mpcli -a router@192.168.0.1
+    - mpcli -a eu.battle.net
+    - mpcli -a speedtest-lon1.digitalocean.com
+    - mpcli -a speedtest-nyc1.digitalocean.com
+    - mpcli -a speedtest-sfo1.digitalocean.com
+    - mpcli -a speedtest.mybroadband.co.za
