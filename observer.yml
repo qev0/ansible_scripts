@@ -7,9 +7,9 @@
     - vars/defaults.yml
     - vars/telegraf.yml
     - vars/influx.yml
-    - vars/grafana.yml
-  roles:
-     - { role: rossmcdonald.influxdb }
+    #- vars/grafana.yml
+  #roles:
+  #   - { role: rossmcdonald.influxdb }
   
   tasks:
     - include: tasks/bashrc.yml

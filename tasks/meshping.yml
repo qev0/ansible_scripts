@@ -4,7 +4,8 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - cython
+    - mercurial
+    - Cython
     - liboping-devel
     - liboping
     - python-flask
@@ -12,7 +13,7 @@
     - redis
 
 - name: Checkout meshping Bitbucket project
-  git:
+  hg:
     repo: http://bitbucket.org/Svedrin/meshping
     dest: /opt/meshping
 
