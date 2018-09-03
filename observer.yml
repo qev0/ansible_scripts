@@ -7,6 +7,7 @@
     - vars/defaults.yml
     - vars/telegraf.yml
     - vars/influx.yml
+    #- vars/prometheus.yml
     #- vars/grafana.yml
   #roles:
   #   - { role: rossmcdonald.influxdb }
@@ -21,7 +22,7 @@
 
     - name: create influxDB data mount point
       file:
-        name: "{{ influx_data_dir }}"
+        name: "{{ influxdb_data_dir }}"
         state: directory
 
     # - name: mount influxDB NFS share
