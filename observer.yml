@@ -9,8 +9,10 @@
     - vars/influx.yml
     #- vars/prometheus.yml
     #- vars/grafana.yml
-  #roles:
-  #   - { role: rossmcdonald.influxdb }
+  roles:
+     - { role: rossmcdonald.telegraf }
+     - { role: rossmcdonald.influxdb }  
+     - { role: williamyeh.prometheus }
   
   tasks:
     - include: tasks/bashrc.yml
@@ -18,12 +20,15 @@
     - include: tasks/meshping.yml
     #- include: tasks/influx.yml
     #- include: tasks/grafana.yml
-    #- include: tasks/prometheus.yml
+    # Prometheus server to poll all our instances
+    #- include: tasks/prometheus_server.yml
+    # Exporter for meshping
+    #- include: tasks/prometheus_explorer.yml
 
-    - name: create influxDB data mount point
-      file:
-        name: "{{ influxdb_data_dir }}"
-        state: directory
+    # - name: create influxDB data mount point
+    #   file:
+    #     name: "{{ influxdb_data_dir }}"
+    #     state: directory
 
     # - name: mount influxDB NFS share
     #   mount:

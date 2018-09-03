@@ -4,9 +4,39 @@
     bashrc_host_type: PI
   vars_files:
     - vars/defaults.yml
+    - vars/telegraf.yml
+  roles:
+     - { role: rossmcdonald.telegraf }
 
   tasks:
     - include: tasks/bashrc.yml
+    - include: tasks/base.yml
+
+    - name: Ensure cpu_temp exec
+      file:
+        path: /usr/bin/cpu_temp
+        state: touch
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: Manage cpu_temp exec content
+      blockinfile:
+        dest: /etc/systemd/system/meshping.service
+        block: |
+          #!/bin/bash
+          cpu=$(</sys/class/thermal/thermal_zone0/temp)
+          hostname=`hostname`
+          database=telegraf
+          cpu=`echo "scale=2;$cpu / 1000" | bc`
+          curl -i -XPOST "http://observer:8086/write?db=$database" --data-binary "temperature,host=$hostname,name=cpu,units=celsius value=$cpu"
+
+    - name: Schedule continuous cpu_temp monitor
+      cron:
+        name: "CPU Temp"
+        minute: "*/1"
+        job: /usr/bin/cpu_temp
+
   # Configure nginx as reverse proxy for all external providers
   # Configure fail2ban(ssh, http, https)
   # Configure letsencrypt

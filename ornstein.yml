@@ -7,6 +7,7 @@
     - vars/defaults.yml
     - vars/telegraf.yml
     - vars/haproxy.yml
+    #- vars/prometheus.yml
   roles:
      - { role: rossmcdonald.telegraf }
      
@@ -14,10 +15,15 @@
     - include: tasks/bashrc.yml
     - include: tasks/base.yml
     - include: tasks/haproxy.yml
+    # Exporter for haproxy???
+    #- include: tasks/prometheus_explorer.yml
     #- include: tasks/plex.yml
     #- include: tasks/kvm.yml
     #- include: tasks/backups.yml
     #- include: tasks/nfs.yml
+
+
+
 
 
 #   #vars:

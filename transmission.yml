@@ -5,8 +5,9 @@
     bashrc_host_type: AWS
   vars_files:
     - vars/defaults.yml
-    - vars/telegraf.yml
-     
+    #- vars/prometheus.yml     
   tasks:
     - include: tasks/bashrc.yml
     - include: tasks/base.yml
+    # We want to be polled rather than to push out info to avoid exposing db ports to the outside world
+    #-include: tasks/prometheus_exporter.yml
