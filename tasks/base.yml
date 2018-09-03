@@ -1,5 +1,5 @@
 --- # Base tasks to be done across all VM's
-- name: Ensure base packages
+- name: Ensure CentOS specific packages
   yum:
     name: "{{ item }}"
     state: present
@@ -10,12 +10,6 @@
     - git
     - fuse
     - bc
-
-- name: Ensure CentOS specific packages
-  yum:
-    name: "{{ item }}"
-    state: present
-  with_items:
     - epel-release
   register: result
   when:
@@ -26,12 +20,33 @@
     name: "{{ item }}"
     state: present
   with_items:
+    - net-tools
+    - iftop
+    - vim
+    - git
+    - fuse
+    - bc
     - snap
     - lm-sensors
     - hddtemp
   register: result
   when:
     - ansible_distribution | regex_search('(Ubuntu)')
+
+- name: Ensure Debian specific packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - net-tools
+    - iftop
+    - vim
+    - git
+    - fuse
+    - bc
+  register: result
+  when:
+    - ansible_distribution | regex_search('(Debian)')
 
 - name: Ensure scripts directory
   file:

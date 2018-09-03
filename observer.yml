@@ -3,6 +3,10 @@
   gather_facts: yes
   vars:
     bashrc_host_type: KVM
+    prometheus_components:
+      - prometheus
+      - node_exporter
+
   vars_files:
     - vars/defaults.yml
     - vars/telegraf.yml
@@ -12,18 +16,19 @@
   roles:
      - { role: rossmcdonald.telegraf }
      - { role: rossmcdonald.influxdb }  
-     - { role: williamyeh.prometheus }
+     - { role: william-yeh.prometheus }
   
   tasks:
     - include: tasks/bashrc.yml
     - include: tasks/base.yml
     - include: tasks/meshping.yml
-    #- include: tasks/influx.yml
+
     #- include: tasks/grafana.yml
+
     # Prometheus server to poll all our instances
     #- include: tasks/prometheus_server.yml
     # Exporter for meshping
-    #- include: tasks/prometheus_explorer.yml
+    #- include: tasks/prometheus_exporter.yml
 
     # - name: create influxDB data mount point
     #   file:
