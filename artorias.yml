@@ -22,7 +22,7 @@
 
     - name: Manage cpu_temp exec content
       blockinfile:
-        dest: /etc/systemd/system/meshping.service
+        dest: /usr/bin/cpu_temp
         block: |
           #!/bin/bash
           cpu=$(</sys/class/thermal/thermal_zone0/temp)
@@ -35,7 +35,7 @@
       cron:
         name: "CPU Temp"
         minute: "*/1"
-        job: /usr/bin/cpu_temp
+        job: /bin/bash /usr/bin/cpu_temp
 
   # Configure nginx as reverse proxy for all external providers
   # Configure fail2ban(ssh, http, https)

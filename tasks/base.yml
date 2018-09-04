@@ -58,11 +58,11 @@
     recurse: yes
 
 - name: Check /etc/hosts before running next task
-  shell: "grep -c 127.0.1.1 /etc/hosts"
+  shell: RESULT=$(grep -c 127.0.1.1 /etc/hosts); if [ $RESULT != 0 ]; then echo 'true'; else echo 'false'; fi
   register: grep_output
 
 - name: Ensure host can resolve itself
   command: "{{ item }}"
   with_items:
     - echo 127.0.1.1 $(hostname) >> /etc/hosts
-  when: grep_output == 0
+  when: grep_output.stdout.find("false") == 0
