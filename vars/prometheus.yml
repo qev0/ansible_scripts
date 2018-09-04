@@ -1,0 +1,22 @@
+--- # Prometheus Custom Variables
+prometheus_version: 2.3.2
+prometheus_bin_dir: "prometheus-{{ prometheus_version }}.linux-amd64"
+prometheus_dl_url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
+node_exporter_version: 0.16.0
+node_exporter_bin_dir: "node_exporter-{{ node_exporter_version }}.linux-amd64"
+node_exporter_dl_url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+
+prometheus_user: prometheus
+prometheus_group: prometheus
+
+prometheus_home_dir: /opt/prometheus
+prometheus_config_dir: /etc/prometheus
+prometheus_data_dir: /var/lib/prometheus
+
+prometheus_clients:
+  - transmission:
+    host: transmission
+    endpoint: 9100
+  - meshping:
+    host: observer
+    endpoint: 9922

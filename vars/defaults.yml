@@ -153,6 +153,3 @@ plexdrive_refresh_token: !vault |
 # Grafana
 ################################
 grafana_config:
-# Prometheus
-################################
-prometheus_config:

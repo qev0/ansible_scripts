@@ -3,11 +3,12 @@
   gather_facts: yes
   vars:
     bashrc_host_type: AWS
+    prometheus_components:
+      - node_exporter
   vars_files:
     - vars/defaults.yml
-    #- vars/prometheus.yml     
+    - vars/prometheus.yml     
   tasks:
     - include: tasks/bashrc.yml
     - include: tasks/base.yml
-    # We want to be polled rather than to push out info to avoid exposing db ports to the outside world
-    #-include: tasks/prometheus_exporter.yml
+    - include: tasks/prometheus.yml

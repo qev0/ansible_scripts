@@ -5,23 +5,23 @@
     bashrc_host_type: KVM
     prometheus_components:
       - prometheus
-      - node_exporter
 
   vars_files:
     - vars/defaults.yml
     - vars/telegraf.yml
     - vars/influx.yml
-    #- vars/prometheus.yml
+    - vars/prometheus.yml
     #- vars/grafana.yml
   roles:
      - { role: rossmcdonald.telegraf }
      - { role: rossmcdonald.influxdb }  
-     - { role: william-yeh.prometheus }
+     #- { role: william-yeh.prometheus }
   
   tasks:
     - include: tasks/bashrc.yml
     - include: tasks/base.yml
     - include: tasks/meshping.yml
+    - include: tasks/prometheus.yml
 
     #- include: tasks/grafana.yml
 # sudo grafana-cli plugins install grafana-clock-panel
@@ -32,9 +32,6 @@
 # #sudo grafana-cli plugins install natel-plotly-panel
 
     # Prometheus server to poll all our instances
-    #- include: tasks/prometheus_server.yml
-    # Exporter for meshping
-    #- include: tasks/prometheus_exporter.yml
 
     # - name: create influxDB data mount point
     #   file:

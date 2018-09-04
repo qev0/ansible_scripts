@@ -10,6 +10,7 @@
     - git
     - fuse
     - bc
+    - mlocate
     - epel-release
   register: result
   when:
@@ -26,6 +27,7 @@
     - git
     - fuse
     - bc
+    - mlocate
     - snap
     - lm-sensors
     - hddtemp
@@ -62,7 +64,5 @@
   register: grep_output
 
 - name: Ensure host can resolve itself
-  command: "{{ item }}"
-  with_items:
-    - echo 127.0.1.1 $(hostname) >> /etc/hosts
+  shell: echo 127.0.1.1 $(hostname) >> /etc/hosts
   when: grep_output.stdout.find("false") == 0

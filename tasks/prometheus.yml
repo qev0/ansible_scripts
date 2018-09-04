@@ -1,0 +1,119 @@
+--- # Prometheus Setup
+# Generic setup
+- name: Setup Prometheus user and directory
+  user:
+    name: "{{ prometheus_user }}"
+    home: "{{ prometheus_home_dir }}"
+    shell: /usr/sbin/nologin
+
+- name: Ensure correct ownership
+  file:
+    path: "{{ prometheus_home_dir }}"
+    recurse: yes
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+
+# Server specific tasks
+- name: Setup server config dir
+  file:
+    path: "{{ prometheus_config_dir }}"
+    state: directory
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: 0644
+    recurse: yes
+  when: '"prometheus" in prometheus_components'
+
+- name: Setup server config file
+  template:
+    src: prometheus.yml.j2
+    dest: /etc/hprometheus/prometheus.yml
+    force: yes
+    backup: yes
+
+- name: Fetch server binary
+  unarchive:
+    src: "{{ prometheus_dl_url }}"
+    dest: "{{ prometheus_home_dir }}"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: 0644
+
+- name: Ensure prometheus.service file
+  file:
+    path: /etc/systemd/system/prometheus.service
+    state: touch
+    owner: root
+    group: root
+    mode: 0755
+  when: '"prometheus" in prometheus_components'
+
+- name: Manage prometheus.service content
+  blockinfile:
+    dest: /etc/systemd/system/prometheus.service
+    block: |
+      [Unit]
+      Description=Prometheus Server
+      After=network.target
+
+      [Service]
+      Restart=always
+      User={{ prometheus_user }}
+      Group={{ prometheus_group }}
+      ExecStart={{ prometheus_home_dir }}/{{ prometheus_bin_dir }}/prometheus -config.file={{ prometheus_config_dir }}/prometheus.yml -storage.local.path={{ prometheus_data_dir }}
+
+      [Install]
+      WantedBy=multi-user.target
+  when: '"prometheus" in prometheus_components'
+
+- name: Enable server service
+  systemd:
+    daemon_reload: yes
+    name: prometheus
+    enabled: yes
+    state: started
+  when: '"prometheus" in prometheus_components'
+
+# Exporter specific tasks
+- name: Fetch exporter binary
+  unarchive:
+    src: "{{ node_exporter_dl_url }}"
+    dest: "{{ prometheus_home_dir }}"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: 0644
+
+- name: Ensure node_exporter.service file
+  file:
+    path: /etc/systemd/system/node_exporter.service
+    state: touch
+    owner: root
+    group: root
+    mode: 0755
+  when: '"node_exporter" in prometheus_components'
+
+- name: Manage node_exporter.service content
+  blockinfile:
+    dest: /etc/systemd/system/node_exporter.service
+    block: |
+      [Unit]
+      Description=node_exporter - Exporter for machine metrics
+      After=network.target
+
+      [Service]
+      Restart=always
+      User={{ prometheus_user }}
+      Group={{ prometheus_group }}
+      ExecStart={{ prometheus_home_dir }}/{{ node_exporter_bin_dir }}/node_exporter
+
+      [Install]
+      WantedBy=multi-user.target
+  when: '"node_exporter" in prometheus_components'
+
+- name: Enable exporter service
+  systemd:
+    daemon_reload: yes
+    name: node_exporter
+    enabled: yes
+    state: started
+  when: '"node_exporter" in prometheus_components'
