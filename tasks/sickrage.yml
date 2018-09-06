@@ -32,7 +32,7 @@
     state: touch
     owner: root
     group: root
-    mode: 0755
+    mode: 0644
 
 - name: Manage sickrage.service content
   blockinfile:

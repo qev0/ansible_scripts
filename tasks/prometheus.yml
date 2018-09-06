@@ -20,16 +20,26 @@
     state: directory
     owner: "{{ prometheus_user }}"
     group: "{{ prometheus_group }}"
-    mode: 0644
+    mode: 0755
     recurse: yes
   when: '"prometheus" in prometheus_components'
 
 - name: Setup server config file
   template:
     src: prometheus.yml.j2
-    dest: /etc/hprometheus/prometheus.yml
+    dest: "{{ prometheus_config_dir }}/prometheus.yml"
     force: yes
     backup: yes
+
+- name: Setup server data dir
+  file:
+    path: "{{ prometheus_data_dir }}"
+    state: directory
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: 0755
+    recurse: yes
+  when: '"prometheus" in prometheus_components'
 
 - name: Fetch server binary
   unarchive:
@@ -37,7 +47,9 @@
     dest: "{{ prometheus_home_dir }}"
     owner: "{{ prometheus_user }}"
     group: "{{ prometheus_group }}"
-    mode: 0644
+    mode: 0755
+    remote_src: yes
+  when: '"prometheus" in prometheus_components'
 
 - name: Ensure prometheus.service file
   file:
@@ -45,7 +57,7 @@
     state: touch
     owner: root
     group: root
-    mode: 0755
+    mode: 0644
   when: '"prometheus" in prometheus_components'
 
 - name: Manage prometheus.service content
@@ -54,13 +66,19 @@
     block: |
       [Unit]
       Description=Prometheus Server
-      After=network.target
+      Documentation=https://prometheus.io/docs/introduction/overview/
+      After=network-online.target
 
       [Service]
+      Type=simple
       Restart=always
       User={{ prometheus_user }}
       Group={{ prometheus_group }}
-      ExecStart={{ prometheus_home_dir }}/{{ prometheus_bin_dir }}/prometheus -config.file={{ prometheus_config_dir }}/prometheus.yml -storage.local.path={{ prometheus_data_dir }}
+      ExecStart={{ prometheus_home_dir }}/{{ prometheus_bin_dir }}/prometheus \
+      --config.file={{ prometheus_config_dir }}/prometheus.yml \
+      --storage.tsdb.path={{ prometheus_data_dir }}/data \
+      --web.console.templates={{ prometheus_data_dir }}/consoles \
+      --web.console.libraries={{ prometheus_data_dir }}/console_libraries
 
       [Install]
       WantedBy=multi-user.target
@@ -81,7 +99,9 @@
     dest: "{{ prometheus_home_dir }}"
     owner: "{{ prometheus_user }}"
     group: "{{ prometheus_group }}"
-    mode: 0644
+    mode: 0755
+    remote_src: yes
+  when: '"node_exporter" in prometheus_components'
 
 - name: Ensure node_exporter.service file
   file:
@@ -89,7 +109,7 @@
     state: touch
     owner: root
     group: root
-    mode: 0755
+    mode: 0644
   when: '"node_exporter" in prometheus_components'
 
 - name: Manage node_exporter.service content
@@ -98,9 +118,10 @@
     block: |
       [Unit]
       Description=node_exporter - Exporter for machine metrics
-      After=network.target
+      After=network-online.target
 
       [Service]
+      Type=simple
       Restart=always
       User={{ prometheus_user }}
       Group={{ prometheus_group }}
