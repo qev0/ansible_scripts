@@ -15,7 +15,6 @@
   roles:
      - { role: rossmcdonald.telegraf }
      - { role: rossmcdonald.influxdb }  
-     #- { role: william-yeh.prometheus }
   
   tasks:
     - include: tasks/bashrc.yml
@@ -23,14 +22,6 @@
     - include: tasks/meshping.yml
     - include: tasks/prometheus.yml
     - include: tasks/grafana.yml
-
-    #- include: tasks/grafana.yml
-# sudo grafana-cli plugins install grafana-clock-panel
-# sudo grafana-cli plugins install natel-discrete-panel
-# sudo grafana-cli plugins install briangann-gauge-panel
-# sudo grafana-cli plugins install vonage-status-panel
-# sudo grafana-cli plugins install neocat-cal-heatmap-panel
-# #sudo grafana-cli plugins install natel-plotly-panel
 
     # Prometheus server to poll all our instances
 
