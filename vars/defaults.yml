@@ -57,6 +57,8 @@ sickrage_config: !vault |
           33393734393733626261313836333730613762623634343933643435653837616466383935306435
           30663764643235353130393736373330326162653565333662373161316165373161333464316165
           616233663665393635336434636537633538
+
+# Packages that aren't big enough to warrant a separate var file
 # Rclone
 rclone_version: v1.41
 rclone_rpm_url: https://downloads.rclone.org/v1.41/rclone-{{ rclone_version }}-linux-amd64.rpm
@@ -149,7 +151,6 @@ plexdrive_refresh_token: !vault |
           3630313866643135610a383231663536643830656437653662633137636462363336623963363739
           62343334656537366664316135623035323730613464663263633261323333393034353963373437
           3234656235663661653836316564343035636663613436363761
-
 # Grafana
-################################
-grafana_config:
+grafana_version: 5.1.4-1
+grafana_rpm_url: https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-{{ grafana_version }}.x86_64.rpm

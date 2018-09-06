@@ -22,6 +22,7 @@
     - include: tasks/base.yml
     - include: tasks/meshping.yml
     - include: tasks/prometheus.yml
+    - include: tasks/grafana.yml
 
     #- include: tasks/grafana.yml
 # sudo grafana-cli plugins install grafana-clock-panel

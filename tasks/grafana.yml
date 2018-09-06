@@ -1,0 +1,15 @@
+--- # Grafana Setup
+- name: Install packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ grafana_rpm_url }}"
+  register: result
+
+- name: Enable grafana service
+  systemd:
+    daemon_reload: yes
+    name: grafana-server
+    enabled: yes
+    state: started

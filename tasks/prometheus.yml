@@ -30,6 +30,7 @@
     dest: "{{ prometheus_config_dir }}/prometheus.yml"
     force: yes
     backup: yes
+  when: '"prometheus" in prometheus_components'
 
 - name: Setup server data dir
   file:
