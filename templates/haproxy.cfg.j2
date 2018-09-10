@@ -54,7 +54,7 @@ frontend {{ haproxy_frontend_name }}
 
         # ACLs
 {% for acl in haproxy_acls %}
-        acl {{ acl.name }} hrd(host) -i {{ acl.name }}.{{ haproxy_fqdn }}
+        acl {{ acl.name }} hdr(host) -i {{ acl.name }}.{{ haproxy_fqdn }}
         use_backend {{ acl.name }} if {{ acl.name }}
 
 {% endfor %}
@@ -80,7 +80,7 @@ backend {{ acl.name }}
 {% if acl.ssl %}
         server {{ acl.name }}{{ i + 1 }} {{ server }} check ssl check-ssl verify none
 {% else %}
-        server {{ acl.name }}{{ i + 1 }} {{ server }} check inter 1s port 80 fall 3 rise 2
+        server {{ acl.name }}{{ i + 1 }} {{ server }} check inter 1s
 {% endif %}
 {% endfor %}
 
