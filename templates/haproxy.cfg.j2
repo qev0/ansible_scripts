@@ -23,9 +23,9 @@ defaults
         mode    http
         option  httplog
         option  dontlognull
-        timeout connect 5000
-        timeout client  50000
-        timeout server  50000
+        timeout connect 100
+        timeout client  1m
+        timeout server  1m
         errorfile 400 /etc/haproxy/errors/400.http
         errorfile 403 /etc/haproxy/errors/403.http
         errorfile 408 /etc/haproxy/errors/408.http
@@ -44,18 +44,17 @@ userlist UsersAuth
 
 frontend {{ haproxy_frontend_name }}
         mode http
+{% if 'haproxy_ssl_cert' is not none %}
+        redirect scheme https code 301 if !{ ssl_fc }
+        bind *:{{ haproxy_https_port }} ssl crt {{ haproxy_ssl_cert }}
+{% endif %}
+        bind *:{{ haproxy_http_port }}
         http-response set-header Strict-Transport-Security max-age=15768000
         http-request set-header X-Forwarded-Host %[req.hdr(Host)]
-{% if 'haproxy_ssl_cert' is not none %}
-        bind *:{{ haproxy_https_port }} ssl crt {{ haproxy_ssl_cert }}
-        bind *:{{ haproxy_http_port }}
-{% endif %}
-        
-        redirect scheme https code 301 if !{ ssl_fc }
 
         # ACLs
 {% for acl in haproxy_acls %}
-        acl {{ acl.name }} url_beg {{ acl.name }}.{{ haproxy_fqdn }}
+        acl {{ acl.name }} hrd(host) -i {{ acl.name }}.{{ haproxy_fqdn }}
         use_backend {{ acl.name }} if {{ acl.name }}
 
 {% endfor %}
@@ -70,8 +69,8 @@ backend {{ acl.name }}
         mode http
         #cookie SERVERID insert indirect nocache
         #option httpchk GET /health/check
-        #option http-server-close
-        #option forwardfor
+        option http-server-close
+        option forwardfor
 {% if acl.auth %}
         acl AuthOkay_Admin http_auth(UsersAuth)
         http-request auth realm Admin if !AuthOkay_Admin
