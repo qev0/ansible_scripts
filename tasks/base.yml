@@ -2,6 +2,8 @@
 - name: Disable SELinux
   selinux:
     state: disabled
+  when:
+    - ansible_distribution | regex_search('(CentOS)')
     
 - name: Ensure CentOS specific packages
   yum:
