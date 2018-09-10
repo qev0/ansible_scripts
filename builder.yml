@@ -1,0 +1,13 @@
+--- # Build host Ansible Playbook
+- hosts: builder
+  gather_facts: yes
+  vars:
+    bashrc_host_type: KVM
+  vars_files:
+    - vars/defaults.yml
+    - vars/telegraf.yml
+  roles:
+     - { role: rossmcdonald.telegraf }
+  tasks:
+    - include: tasks/bashrc.yml
+    - include: tasks/base.yml

@@ -71,8 +71,8 @@
   with_items:
     - mpcli -a google.com@8.8.8.8
     - mpcli -a router@192.168.0.1
-    - mpcli -a eu.battle.net
-    - mpcli -a speedtest-lon1.digitalocean.com
-    - mpcli -a speedtest-nyc1.digitalocean.com
-    - mpcli -a speedtest-sfo1.digitalocean.com
-    - mpcli -a speedtest.mybroadband.co.za
+    - mpcli -a eu.battle.net@185.60.115.40
+    - mpcli -a speedtest-lon1.digitalocean.com@46.101.44.214
+    - mpcli -a speedtest-nyc1.digitalocean.com@165.227.194.167
+    - mpcli -a speedtest-sfo1.digitalocean.com@107.170.223.15
+    - mpcli -a speedtest.mybroadband.co.za@196.10.98.18
