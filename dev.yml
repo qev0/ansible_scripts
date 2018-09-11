@@ -11,3 +11,5 @@
   tasks:
     - include: tasks/bashrc.yml
     - include: tasks/base.yml
+    - include: tasks/dev.yml
+    - include: tasks/nginx.yml

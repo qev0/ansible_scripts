@@ -154,3 +154,5 @@ plexdrive_refresh_token: !vault |
 # Grafana
 grafana_version: 5.1.4-1
 grafana_rpm_url: https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-{{ grafana_version }}.x86_64.rpm
+# Couchbase
+couchbase_repo_url: http://packages.couchbase.com/releases/couchbase-release/couchbase-release-1.0-4-x86_64.rpm

@@ -1,0 +1,28 @@
+--- # Generic dev host setup
+- name: Ensure necessary packages are installed
+  yum:
+    name: "{{ item }}" 
+    state: present
+  with_items:
+    - "{{ couchbase_repo_url }}"
+    - python-devel
+    - php
+    - nodejs
+    - nginx
+    - node-gyp
+    - gcc
+    - gcc-c++
+    - libcouchbase-devel
+    - libcouchbase2-bin
+  register: result
+
+- name: Ensure latest version of npm
+  command: "npm i npm"
+
+
+- name: Install various dependencies
+  command: "{{ item }}"
+  with_items:
+    - pip install flask
+    - npm install -g couchbase
+    - npm install -g prebuild
