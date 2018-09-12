@@ -32,11 +32,13 @@ telegraf_plugins_base:
   - name: diskio
     options:
       skip_serial_number: "true"
-  - name: procstat
-    options:
-      exe: "influxd"
-      prefix: "influxdb"
+#  - name: procstat
+#    options:
+#      exe: "influxd"
+#      prefix: "influxdb"    
   - name: net
     options:
       interfaces:
         - "{{ ansible_default_ipv4.interface }}"
+
+telegraf_snmp_enabled: "{{ true if 'observer' in ansible_hostname else false }}"

@@ -182,6 +182,173 @@
 {% endif %}
 {% endfor %}
 
+{% if telegraf_snmp_enabled -%}
+##
+## SNMP Input Plugin
+##
+[[inputs.snmp]]
+  name = {{ telegraf_snmp_name }}
+  agents = [ "192.168.0.1" ]
+  interval = "60s"
+  timeout = "5s"
+  retries = 3
+  version = 2
+  community = {{ telegraf_snmp_community }}
+  
+  max_repetitions = 50
+  
+  ## Exclusions
+  fielddrop = [ "laErrorFlag", "laErrMessage" ]
+  [inputs.snmp.tagdrop]
+    diskIODevice = [ "loop*", "ram*" ]
+
+  ## System details
+  [[inputs.snmp.field]]
+    name = "sysName"
+    oid = "SNMPv2-MIB::sysName.0"
+    is_tag = true
+
+  ## Host/System Resources
+  [[inputs.snmp.field]]
+    name = "sysUpTime"
+    oid = "HOST-RESOURCES-MIB::hrSystemUptime.0"
+  [[inputs.snmp.field]]
+    name = "hrSystemNumUsers"
+    oid = "HOST-RESOURCES-MIB::hrSystemNumUsers.0"
+  [[inputs.snmp.field]]
+    name = "hrSystemProcesses"
+    oid = "HOST-RESOURCES-MIB::hrSystemProcesses.0"
+
+  ## CPU utilization
+  [[inputs.snmp.field]]
+    name = "ssCpuRawUser"
+    oid = "UCD-SNMP-MIB::ssCpuRawUser.0"
+  [[inputs.snmp.field]]
+    name = "ssCpuRawSystem"
+    oid = "UCD-SNMP-MIB::ssCpuRawSystem.0"
+  [[inputs.snmp.field]]
+    name = "ssCpuRawIdle"
+    oid = "UCD-SNMP-MIB::ssCpuRawIdle.0"
+  [[inputs.snmp.field]]
+    name = "ssCpuRawWait"
+    oid = "UCD-SNMP-MIB::ssCpuRawWait.0"
+  [[inputs.snmp.field]]
+    name = "ssCpuRawKernel"
+    oid = "UCD-SNMP-MIB::ssCpuRawKernel.0"
+  [[inputs.snmp.field]]
+    name = "ssCpuRawInterrupt"
+    oid = "UCD-SNMP-MIB::ssCpuRawInterrupt.0"
+
+  ## System Memory (physical/virtual)
+  [[inputs.snmp.field]]
+    name = "hrMemorySize"
+    oid = "HOST-RESOURCES-MIB::hrMemorySize.0"
+  [[inputs.snmp.field]]
+    name = "memTotalReal"
+    oid = "UCD-SNMP-MIB::memTotalReal.0"
+  [[inputs.snmp.field]]
+    name = "memAvailReal"
+    oid = "UCD-SNMP-MIB::memAvailReal.0"
+  [[inputs.snmp.field]]
+    name = "memTotalFree"
+    oid = "UCD-SNMP-MIB::memTotalFree.0"
+  [[inputs.snmp.field]]
+    name = "memShared"
+    oid = "UCD-SNMP-MIB::memShared.0"
+  [[inputs.snmp.field]]
+    name = "memBuffer"
+    oid = "UCD-SNMP-MIB::memBuffer.0"
+  [[inputs.snmp.field]]
+    name = "memCached"
+    oid = "UCD-SNMP-MIB::memCached.0"
+
+  ## Block (Disk) performance
+  [[inputs.snmp.field]]
+    name = "ssIORawSent"
+    oid = "UCD-SNMP-MIB::ssIORawSent.0"
+  [[inputs.snmp.field]]
+    name = "ssIORawReceived"
+    oid = "UCD-SNMP-MIB::ssIORawReceived.0"
+  [[inputs.snmp.table]]
+    oid = "UCD-DISKIO-MIB::diskIOTable"
+    [[inputs.snmp.table.field]]
+      oid = "UCD-DISKIO-MIB::diskIODevice"
+      is_tag = true
+  
+  ## Disk/Partition/Filesystem inventory & usage
+  [[inputs.snmp.table]]
+    oid = "HOST-RESOURCES-MIB::hrStorageTable"
+    [[inputs.snmp.table.field]]
+      oid = "HOST-RESOURCES-MIB::hrStorageDescr"
+      is_tag = true
+
+  ## Interface metrics
+  [[inputs.snmp.table]]
+    oid = "IF-MIB::ifTable"
+    [[inputs.snmp.table.field]]
+      oid = "IF-MIB::ifName"
+      is_tag = true
+  [[inputs.snmp.table]]
+    oid = "IF-MIB::ifXTable"
+    [[inputs.snmp.table.field]]
+      oid = "IF-MIB::ifName"
+      is_tag = true
+
+  ## IP metrics
+  [[inputs.snmp.table]]
+    index_as_tag = true
+    oid = "IP-MIB::ipSystemStatsTable"
+
+  ## UDP statistics
+  #  Datagrams delivered to app
+  [[inputs.snmp.field]]
+    name = "udpInDatagrams"
+    oid = "UDP-MIB::udpInDatagrams.0"
+  [[inputs.snmp.field]]
+    name = "udpNoPorts"
+    oid = "UDP-MIB::udpNoPorts.0"
+  [[inputs.snmp.field]]
+    name = "udpInErrors"
+    oid = "UDP-MIB::udpInErrors.0"
+  [[inputs.snmp.field]]
+    name = "udpOutDatagrams"
+    oid = "UDP-MIB::udpOutDatagrams.0"
+
+  ## TCP statistics
+  [[inputs.snmp.field]]
+    name = "tcpActiveOpens"
+    oid = "TCP-MIB::tcpActiveOpens.0"
+  [[inputs.snmp.field]]
+    name = "tcpAttemptFails"
+    oid = "TCP-MIB::tcpAttemptFails.0"
+  [[inputs.snmp.field]]
+    name = "tcpEstabResets"
+    oid = "TCP-MIB::tcpEstabResets.0"
+  [[inputs.snmp.field]]
+    name = "tcpCurrEstab"
+    oid = "TCP-MIB::tcpCurrEstab.0"
+  [[inputs.snmp.field]]
+    name = "tcpInErrs"
+    oid = "TCP-MIB::tcpInErrs.0"
+  [[inputs.snmp.field]]
+    name = "tcpOutRsts"
+    oid = "TCP-MIB::tcpOutRsts.0"
+
+  ## SNMP metrics
+  [[inputs.snmp.field]]
+    name = "snmpInPkts"
+    oid = "SNMPv2-MIB::snmpInPkts.0"
+  [[inputs.snmp.field]]
+    name = "snmpInGetRequests"
+    oid = "SNMPv2-MIB::snmpInGetRequests.0"
+    [[inputs.snmp.field]]
+    name = "snmpOutPkts"
+    oid = "SNMPv2-MIB::snmpOutPkts.0"
+  [[inputs.snmp.field]]
+    name = "snmpOutGetRequests"
+    oid = "SNMPv2-MIB::snmpOutGetRequests.0"
+{% endif %}
+
 ###############################################################################
 #                              service PLUGINS                                #
 ###############################################################################

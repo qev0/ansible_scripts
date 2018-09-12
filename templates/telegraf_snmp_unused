@@ -1,0 +1,94 @@
+  ## System details
+  [[inputs.snmp.field]]
+    name = "sysObjectID"
+    oid = "SNMPv2-MIB::sysObjectID.0"
+  [[inputs.snmp.field]]
+    name = "sysDescr"
+    oid = "SNMPv2-MIB::sysDescr.0"
+  [[inputs.snmp.field]]
+    name = "sysContact"
+    oid = "SNMPv2-MIB::sysContact.0"
+  [[inputs.snmp.field]]
+    name = "sysLocation"
+    oid = "SNMPv2-MIB::sysLocation.0"
+  ## Host/System Resources
+  [[inputs.snmp.table]]
+    oid = "HOST-RESOURCES-MIB::hrDeviceTable"
+    [[inputs.snmp.table.field]]
+      oid = "HOST-RESOURCES-MIB::hrDeviceIndex"
+      is_tag = true
+  ## Context Switches & Interrupts
+  [[inputs.snmp.field]]
+    name = "ssRawInterrupts"
+    oid = "UCD-SNMP-MIB::ssRawInterrupts.0"
+  [[inputs.snmp.field]]
+    name = "ssRawContexts"
+    oid = "UCD-SNMP-MIB::ssRawContexts.0"
+  ## Host performance metrics
+  [[inputs.snmp.table]]
+    oid = "UCD-SNMP-MIB::laTable"
+    [[inputs.snmp.table.field]]
+      oid = "UCD-SNMP-MIB::laNames"
+      is_tag = true
+  ## CPU inventory
+  [[inputs.snmp.table]]
+    index_as_tag = true
+    oid = "HOST-RESOURCES-MIB::hrProcessorTable"
+  ## CPU utilization
+  [[inputs.snmp.field]]
+    name = "ssCpuRawNice"
+    oid = "UCD-SNMP-MIB::ssCpuRawNice.0"
+  [[inputs.snmp.field]]
+    name = "ssCpuRawSoftIRQ"
+    oid = "UCD-SNMP-MIB::ssCpuRawSoftIRQ.0"
+  ## ICMP Metrics
+  [[inputs.snmp.table]]
+    index_as_tag = true
+    oid = "IP-MIB::icmpStatsTable"
+  [[inputs.snmp.table]]
+    index_as_tag = true
+    oid = "IP-MIB::icmpMsgStatsTable"
+  ## TCP statistics
+  [[inputs.snmp.field]]
+    name = "tcpPassiveOpens"
+    oid = "TCP-MIB::tcpPassiveOpens.0"
+  [[inputs.snmp.field]]
+    name = "tcpInSegs"
+    oid = "TCP-MIB::tcpInSegs.0"
+  [[inputs.snmp.field]]
+    name = "tcpOutSegs"
+    oid = "TCP-MIB::tcpOutSegs.0"
+  [[inputs.snmp.field]]
+    name = "tcpRetransSegs"
+    oid = "TCP-MIB::tcpRetransSegs.0"
+  ## IP routing statistics
+  [[inputs.snmp.field]]
+    name = "inetCidrRouteNumber"
+    oid = "IP-FORWARD-MIB::inetCidrRouteNumber.0"
+  [[inputs.snmp.field]]
+    name = "inetCidrRouteDiscards"
+    oid = "IP-FORWARD-MIB::inetCidrRouteDiscards.0"
+  [[inputs.snmp.field]]
+    name = "ipForwardNumber"
+    oid = "IP-FORWARD-MIB::ipForwardNumber.0"
+  ## IP routing statistics
+  [[inputs.snmp.field]]
+    name = "ipRoutingDiscards"
+    oid = "RFC1213-MIB::ipRoutingDiscards.0"
+
+  ## SNMP metrics
+  [[inputs.snmp.field]]
+    name = "snmpInGetNexts"
+    oid = "SNMPv2-MIB::snmpInGetNexts.0"
+  [[inputs.snmp.field]]
+    name = "snmpInTotalReqVars"
+    oid = "SNMPv2-MIB::snmpInTotalReqVars.0"
+  [[inputs.snmp.field]]
+    name = "snmpInGetResponses"
+    oid = "SNMPv2-MIB::snmpInGetResponses.0"
+  [[inputs.snmp.field]]
+    name = "snmpOutGetNexts"
+    oid = "SNMPv2-MIB::snmpOutGetNexts.0"
+  [[inputs.snmp.field]]
+    name = "snmpOutGetResponses"
+    oid = "SNMPv2-MIB::snmpOutGetResponses.0"

@@ -154,5 +154,14 @@ plexdrive_refresh_token: !vault |
 # Grafana
 grafana_version: 5.1.4-1
 grafana_rpm_url: https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-{{ grafana_version }}.x86_64.rpm
+# Telegraf
+telegraf_snmp_name: "snmp.EdgeOS"
+telegraf_snmp_community: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          38653133323164386164613637393365653132373134313137306232396134626561303230353335
+          6463626335306238636135306435326461363765633965390a383335313962303365343935623837
+          30383537613232633632383433663064656639616534323230346136376164343866643735386230
+          3331636432613866370a393630323431396631623061346166353630653461336138663036373738
+          6139
 # Couchbase
 couchbase_repo_url: http://packages.couchbase.com/releases/couchbase-release/couchbase-release-1.0-4-x86_64.rpm
