@@ -16,6 +16,7 @@ telegraf_configuration_dir: "/etc/telegraf"
 telegraf_influxdb_urls:
   - http://observer:8086
 telegraf_influxdb_database: telegraf
+
 telegraf_plugins_base:
   - name: mem
   - name: system
@@ -40,5 +41,7 @@ telegraf_plugins_base:
     options:
       interfaces:
         - "{{ ansible_default_ipv4.interface }}"
+
+telegraf_plugins: "{{ telegraf_plugins_base }} + {{ telegraf_plugins_extra | default([]) }}"
 
 telegraf_snmp_enabled: "{{ true if 'observer' in ansible_hostname else false }}"

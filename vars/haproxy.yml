@@ -120,7 +120,7 @@ haproxy_acls:
           3638
     auth: true
     ssl: false
-    server:
+    servers:
       - !vault |
           $ANSIBLE_VAULT;1.1;AES256
           38303632613165396166383765333266303464393062336465663266313030626266383532303762
