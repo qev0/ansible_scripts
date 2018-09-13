@@ -13,12 +13,12 @@
     - vars/prometheus.yml
     #- vars/grafana.yml
   roles:
-     - { role: rossmcdonald.telegraf }
      - { role: rossmcdonald.influxdb }  
   
   tasks:
     - include: tasks/bashrc.yml
     - include: tasks/base.yml
+    - include: tasks/telegraf.yml
     - include: tasks/meshping.yml
     - include: tasks/prometheus.yml
     - include: tasks/grafana.yml

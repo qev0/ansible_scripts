@@ -18,6 +18,7 @@
     - bc
     - wget
     - telnet
+    - curl
     - mlocate
     - epel-release
   register: result
@@ -37,10 +38,14 @@
     - bc
     - wget
     - telnet
+    - curl
     - mlocate
     - snap
     - lm-sensors
     - hddtemp
+    - python-httplib2
+    - python-apt
+    - apt-transport-https
   register: result
   when:
     - ansible_distribution | regex_search('(Ubuntu)')
@@ -58,6 +63,10 @@
     - bc
     - wget
     - telnet
+    - curl
+    - python-httplib2
+    - python-apt
+    - apt-transport-https
   register: result
   when:
     - ansible_distribution | regex_search('(Debian)')
