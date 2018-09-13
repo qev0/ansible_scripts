@@ -5,12 +5,11 @@
   vars_files:
     - vars/defaults.yml
     - vars/telegraf.yml
-  roles:
-     - { role: rossmcdonald.telegraf }
 
   tasks:
     - include: tasks/bashrc.yml
     - include: tasks/base.yml
+    - include: tasks/telegraf.yml
 
     - name: Ensure cpu_temp exec
       file:

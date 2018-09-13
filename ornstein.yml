@@ -8,12 +8,11 @@
     - vars/telegraf.yml
     - vars/haproxy.yml
     #- vars/prometheus.yml
-  roles:
-     - { role: rossmcdonald.telegraf }
      
   tasks:
     - include: tasks/bashrc.yml
     - include: tasks/base.yml
+    - include: tasks/telegraf.yml
     - include: tasks/haproxy.yml
     # Exporter for haproxy???
     #- include: tasks/prometheus_explorer.yml

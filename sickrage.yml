@@ -6,12 +6,11 @@
   vars_files:
     - vars/defaults.yml
     - vars/telegraf.yml
-  roles:
-     - { role: rossmcdonald.telegraf }
      
   tasks:
     - include: tasks/bashrc.yml
     - include: tasks/base.yml
+    - include: tasks/telegraf.yml
     - include: tasks/sickrage.yml
     - include: tasks/rclone.yml
     - include: tasks/backups.yml
