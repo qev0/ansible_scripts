@@ -26,56 +26,47 @@
    {{ key }} = "{{ value }}"
 {% endfor %}
 {% endif %}
-{% if telegraf_aws_tags == true and ec2_tags is defined and ec2_tags != None %}
-{% for key, value in ec2_tags.tags.iteritems()%}
-   {{telegraf_aws_tags_prefix}}{{ key }} = "{{ value }}"
-{% endfor %}
-{% endif %}
 
 # Configuration for telegraf agent
 [agent]
   ## Default data collection interval for all inputs
-  interval = "{{ telegraf_agent_interval }}"
+  interval = "10s"
   ## Rounds collection interval to 'interval'
   ## ie, if interval="10s" then always collect on :00, :10, :20, etc.
-  round_interval = {{ telegraf_round_interval }}
+  round_interval = true
 
   ## Telegraf will send metrics to outputs in batches of at
   ## most metric_batch_size metrics.
-  metric_batch_size = {{ telegraf_metric_batch_size }}
+  metric_batch_size = 1000
   ## For failed writes, telegraf will cache metric_buffer_limit metrics for each
   ## output, and will flush this buffer on a successful write. Oldest metrics
   ## are dropped first when this buffer fills.
-  metric_buffer_limit = {{ telegraf_metric_buffer_limit }}
+  metric_buffer_limit = 10000
 
   ## Collection jitter is used to jitter the collection by a random amount.
   ## Each plugin will sleep for a random time within jitter before collecting.
   ## This can be used to avoid many plugins querying things like sysfs at the
   ## same time, which can have a measurable effect on the system.
-  collection_jitter = "{{ telegraf_collection_jitter }}"
+  collection_jitter = "0s"
 
   ## Default flushing interval for all outputs. You shouldn't set this below
   ## interval. Maximum flush_interval will be flush_interval + flush_jitter
-  flush_interval = "{{ telegraf_flush_interval }}"
+  flush_interval = "10s"
   ## Jitter the flush interval by a random amount. This is primarily to avoid
   ## large write spikes for users running a large number of telegraf instances.
   ## ie, a jitter of 5s and interval 10s means flushes will happen every 10-15s
-  flush_jitter = "{{ telegraf_flush_jitter }}"
+  flush_jitter = "0s"
 
   ## Run telegraf in debug mode
-  debug = {{ telegraf_debug }}
+  debug = false
   ## Run telegraf in quiet mode
-  quiet = {{ telegraf_quiet }}
+  quiet = false
 
   # Override default hostname, if empty use os.Hostname()
-{% if telegraf_hostname is defined and telegraf_hostname != None %}
-  hostname = "{{ telegraf_hostname }}"
-{% else %}
   hostname = "{{ ansible_hostname }}"
-{% endif %}
 
   ## If set to true, do no set the "host" tag in the telegraf agent.
-  omit_hostname = {{ telegraf_omit_hostname }}
+  omit_hostname = false
 
 ###############################################################################
 #                                  OUTPUTS                                    #
@@ -94,16 +85,16 @@
   database = "{{ telegraf_influxdb_database }}" # required
   # Precision of writes, valid values are n, u, ms, s, m, and h
   # note: using second precision greatly helps InfluxDB compression
-  precision = "{{ telegraf_influxdb_precision }}"
+  precision = "s"
 
   ## Retention policy to write to.
-  retention_policy = "{{ telegraf_influxdb_retention_policy }}"
+  retention_policy = "autogen"
   ## Write consistency (clusters only), can be: "any", "one", "quorom", "all"
-  write_consistency = "{{ telegraf_influxdb_write_consistency }}"
+  write_consistency = "any"
 
   # Connection timeout (for the connection with InfluxDB), formatted as a string.
   # If not provided, will default to 0 (no timeout)
-  timeout = "{{ telegraf_influxdb_timeout }}"
+  timeout = "5s"
 {% if telegraf_influxdb_username is defined and telegraf_influxdb_username != None %}
   username = "{{ telegraf_influxdb_username }}"
 {% endif %}

@@ -10,12 +10,12 @@ telegraf_configuration_template: telegraf.conf.j2
 
 # Configuration Variables
 telegraf_tags:
-telegraf_hostname: "{{ ansible_hostname }}"
 
 # Override this variable if there's a specific source you'd like to install
 telegraf_configuration_dir: "/etc/telegraf"
 telegraf_influxdb_urls:
   - http://observer:8086
+telegraf_influxdb_database: telegraf
 telegraf_plugins_base:
   - name: mem
   - name: system

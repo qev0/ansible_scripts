@@ -3,7 +3,7 @@
 # RHEL repo and install
 - name: Add InfluxData repository file [RHEL/CentOS]
   template:
-    src: etc/yum.repos.d/influxdata.repo.j2
+    src: influxdata.repo.j2
     dest: /etc/yum.repos.d/influxdata.repo
     force: yes
     backup: yes
