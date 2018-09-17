@@ -4,13 +4,14 @@
     dest: "{{ '/etc/bashrc' if 'CentOS' in ansible_distribution else '/etc/bash.bashrc' }}"
     block: |
       # Color stuff
-      USER_COLOR="\e[92m"
-      HOST_COLOR="\e[93m"
-      HEADER_COLOR="\e[38;5;39m"
-      NO_COLOR="\e[39m"
+      USER_COLOR="\[\e[92m\]"
+      HOST_COLOR="\[\e[93m\]"
+      HEADER_COLOR="\[\e[38;5;39m\]"
+      NO_COLOR="\[\e[39m\]"
       
       if [ ${UID} -eq 0 ]; then
-        USER_COLOR="\e[91m"
+        USER_COLOR="\[\e[91m\]"
       fi
       
       PS1="${HEADER_COLOR}{{ bashrc_host_type }} ${USER_COLOR}\u${HOST_COLOR}@\h \W \\$ ${NO_COLOR}"
+      #PS1="\[\e[91m\]\u\[\e[38;5;208m\]@\[\e[92m\]\h:\[\e[96m\]\$PWD\[\e[35m\]//$(date +"%D-%H:%M" | sed 's/\//-/g')\n\[\e[38;5;21m\][$]~> \[\e[0m\] "
